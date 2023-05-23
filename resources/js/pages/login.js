@@ -1,9 +1,12 @@
 const loginSubmit = document.querySelector(".loginSubmit")
 const loginEmail = document.querySelector('[name="email"]')
 const loginPass = document.querySelector('[name="password"]')
+
 console.log("login")
+
 loginSubmit &&
-  loginSubmit.addEventListener("click", async () => {
+  loginSubmit.addEventListener("click", async (e) => {
+    e.preventDefault()
     const data = {
       email: loginEmail.value,
       password: loginPass.value,
@@ -19,7 +22,7 @@ loginSubmit &&
     await fetch(url, options)
       .then((response) => response.json())
       .then((result) => {
-        window.location.href = "http://127.0.0.1:8000/dashboard/"
+        /* window.location.href = "http://127.0.0.1:8000/dashboard/" */
       })
       .catch((error) => {
         console.log(error)

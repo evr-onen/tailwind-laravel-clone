@@ -15,10 +15,10 @@ class AuthController extends Controller
      *
      * @return void
      */
-    // public function __construct()
-    // {
-    //     $this->middleware('auth:api', ['except' => ['login']]);
-    // }
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['login']]);
+    }
 
     /**
      * Get a JWT via given credentials.
@@ -30,9 +30,6 @@ class AuthController extends Controller
     public function register()
     {
 
-
-
-        // return request()->all();
         $validator = validator()->make(request()->all(), [
             'email'     => 'required | email',
             'password'  => 'required | string | min:4 | confirmed',
@@ -66,16 +63,19 @@ class AuthController extends Controller
         if (!$token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
-        $cookie = Cookie::make('token', $token, 600);
+
+        if (Cookie::has('token')) {
+            Cookie::queue(Cookie::forget('token'));
+        }
 
 
-        return $this->respondWithToken($token);
+        // $encryptedToken = encrypt($token);
+
+        return response()->json(['token' => $token])->cookie('token', $token, 600);
     }
 
     public function sss()
     {
-
-
         return "sss";
     }
 
